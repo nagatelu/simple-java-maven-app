@@ -20,7 +20,7 @@ pipeline {
                 withSonarQubeEnv('SonarCloud') {
                     // Optionally use a Maven environment you've configured already
                     //withMaven(maven:'Maven 3.5') {
-                        sh 'mvn clean package sonar:sonar'
+                        sh 'mvn clean package sonar:sonar -Dsonar.projectKey=javaprojectnaga -Dsonar.organization=javaprojectnaga'
                    // }
                 }
             }

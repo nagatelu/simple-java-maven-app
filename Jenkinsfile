@@ -15,12 +15,14 @@ pipeline {
             }
         }
 
-	stage('SonarQube analysis') {
-    		def scannerHome = tool 'SonarScanner 4.7';
-    		withSonarQubeEnv('SonarCloud') { // If you have configured more than one global server connection, you can specify its name
-      		sh "${scannerHome}/bin/sonar-scanner"
-    		}
-  	}
+	stage("build & SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('SonarCloud') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
 
        stage('Test') {
             steps {

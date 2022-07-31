@@ -16,7 +16,7 @@ pipeline {
         }
 
 	stage("build & SonarQube analysis") {
-            agent any
+            agent docker("3.8.1-adoptopenjdk-11")
             steps {
               withSonarQubeEnv('SonarCloud') {
                 sh 'mvn clean package sonar:sonar'

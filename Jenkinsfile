@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-	stage('build && SonarQube analysis') {
+	stage('Build and SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud') {
                     // Optionally use a Maven environment you've configured already
@@ -25,7 +25,20 @@ pipeline {
                 }
             }
         }
+	stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
 
+ 	stage('SCA-Snyk') {
+	      steps {
+        	echo 'Testing...'
+        	snykSecurity(snykInstallation: 'SNYK_TOKEN',snykTokenId: 'SNYK_TOKEN')
+      		}
+    	}
        stage('Test') {
             steps {
                 sh 'mvn test'

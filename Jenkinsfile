@@ -15,14 +15,16 @@ pipeline {
             }
         }
 
-	stage("build & SonarQube analysis") {
-            agent docker("3.8.1-adoptopenjdk-11")
+	stage('build && SonarQube analysis') {
             steps {
-              withSonarQubeEnv('SonarCloud') {
-                sh 'mvn clean package sonar:sonar'
-              }
+                withSonarQubeEnv('SonarCloud') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven 3.5') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
             }
-          }
+        }
 
        stage('Test') {
             steps {
